@@ -8,6 +8,34 @@ CREATE TABLE Users (
 );
 INSERT INTO Users (user_id, Password, Name, Email, Phone, Address)  
    VALUES ('ram123', 'dummyP', 'Ram Charan', 'ram.cherry@relevel.com', '7777000055', 'Plot No 5/A, Pedemma Temple Lane, Madhapur, Hyderabad');
+   
+INSERT INTO Users (user_id, Password, Name, Email, Phone, Address)  
+   VALUES ('harry', 'HarrpPws', 'Harry Stain', 'harry@relevel.com', '8454123697', 'Plot No 47/A, Main Road, Madhuranagar, Hyderabad');
+   
+INSERT INTO Users (user_id, Password, Name, Email, Phone, Address)  
+   VALUES ('sukesh', 'SukeshPwd', 'Sukesh Kumar', 'sukesh@relevel.com', '8897456217', 'House No 85-24-5/5/A, Main Road, Sanath Nagar, Hyderabad');
+   
+CREATE TABLE Vendors (
+    vendor_id varchar(255) PRIMARY KEY,
+    password varchar(255),
+    brand_name varchar(255),
+    email varchar(255),
+    phone varchar(255)
+);
+
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+   VALUES ('mudramark', 'mud@rml', 'Mudramark', 'info.mudramark@relevel.com', '8457459857');
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+	VALUES ('hometown', 'home&twn', 'HomeTown', 'info.hometown@relevel.com', '8454758740');
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+	VALUES ('mintwud', 'mintWUD', 'Mintwud', 'info.mintwud@relevel.com', '9954715695');
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+	VALUES ('casacraft', 'casa$crft', 'CasaCraft', 'info.casacraft@relevel.com', '8845769312');
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+	VALUES ('dreamzzfurnityre', 'dreamzzfurnityre$$$', 'Dreamzz Furnityre', 'info.dreamzzfurnityre@relevel.com', '8842632117');
+INSERT INTO Vendors (vendor_id, password, brand_name, email, phone)  
+	VALUES ('arra', 'arra@1234', 'ARRA', 'info.arra@relevel.com', '7845987849');
+
 
 CREATE TABLE Category (
 	category varchar(255) PRIMARY KEY
@@ -64,7 +92,7 @@ CREATE TABLE Inventory (
     category varchar(255) references Category(category),
     subcategory varchar(255) references SubCategory(subcategory),
     furniture_name varchar(255),
-    brand_name varchar(255),
+    brand_name varchar(255) references Vendors(brand_name),
     cost DECIMAL
 );
 
@@ -81,7 +109,7 @@ INSERT INTO Inventory (category, subcategory, furniture_name, brand_name, cost)
 INSERT INTO Inventory (category, subcategory, furniture_name, brand_name, cost)    
    VALUES ('beds', 'queen size beds', 'Opus Queen Size Bed with Box Storage', 'Mintwud', 11799);
 INSERT INTO Inventory (category, subcategory, furniture_name, brand_name, cost)    
-   VALUES ('beds', 'queen size beds', 'Starlight Queene Bed with Storage', 'Hometown', 41895);
+   VALUES ('beds', 'queen size beds', 'Starlight Queene Bed with Storage', 'HomeTown', 41895);
 INSERT INTO Inventory (category, subcategory, furniture_name, brand_name, cost)  
    VALUES ('sofas and recliners', '3 seater sofas', 'Delfina 3 Seater Sofa', 'CasaCraft', 51999);
 INSERT INTO Inventory (category, subcategory, furniture_name, brand_name, cost)  
@@ -112,14 +140,22 @@ CREATE TABLE ORDER_DETAILS (
    order_id INTEGER AUTO_INCREMENT PRIMARY KEY,
    user_id varchar(255) references Users(user_id),
    order_created_date DATE,
-   order_status varchar2(255)
+   order_status varchar(255),
+   delivered_date DATE
 );
      
-INSERT INTO ORDER_DETAILS (user_id, order_created_date, order_status)
-values ('ram123', '2022-01-22', 'Delivered');
+INSERT INTO ORDER_DETAILS (user_id, order_created_date, order_status, delivered_date)
+values ('ram123', '2021-06-28', 'Delivered', '2021-07-15');
+
+INSERT INTO ORDER_DETAILS (user_id, order_created_date, order_status, delivered_date)
+values ('harry', '2022-01-25', 'Return', '2022-01-29');
 
 INSERT INTO ORDER_DETAILS (user_id, order_created_date, order_status)
-values ('ram123', '2021-06-28', 'Pending');
+values ('ram123', '2022-01-22', 'Pending');
+
+INSERT INTO ORDER_DETAILS (user_id, order_created_date, order_status, delivered_date)
+values ('sukesh', '2021-12-28', 'Delivered', '2022-01-15');
+
 
 CREATE TABLE ORDER_ITEMS (
    order_items_id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -131,6 +167,26 @@ INSERT INTO ORDER_ITEMS (order_id, furniture_id)
    VALUES (1, 2);
 
 INSERT INTO ORDER_ITEMS (order_id, furniture_id)  
-   VALUES (2, 5);
+   VALUES (2, 1);
+   
+INSERT INTO ORDER_ITEMS (order_id, furniture_id)  
+   VALUES (3, 5);
 
+ INSERT INTO ORDER_ITEMS (order_id, furniture_id)  
+   VALUES (4, 3); 
+   
+ 
+CREATE TABLE ServiceRequests (
+   service_request_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+   order_id INTEGER references ORDER_DETAILS(order_id),
+   user_id varchar(255) references Users(user_id),
+   request_description varchar(255),
+   status varchar(255),
+   technation_name varchar(255),
+   technation_mobile varchar(255)
+);
+
+INSERT INTO ServiceRequests (order_id, user_id, request_description, status)  
+   VALUES (4, 'sukesh', 'The bed is making a cracking sound and the fittings are loose', 'pending');
+ 
 
